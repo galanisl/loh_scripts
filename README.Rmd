@@ -83,7 +83,7 @@ SNP profile:
 - check_fastq_quality.R
 - trim_and_filter.R
 - correct_fastq.sh
-- call_snps.sh (in preparation)
+- call_snps.sh
 
 The resulting VCF files can be explored with, for example, the Integrative 
 Genomics Viewer.

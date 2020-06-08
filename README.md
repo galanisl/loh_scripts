@@ -82,7 +82,7 @@ containing its SNP profile:
   - check\_fastq\_quality.R
   - trim\_and\_filter.R
   - correct\_fastq.sh
-  - call\_snps.sh (in preparation)
+  - call\_snps.sh
 
 The resulting VCF files can be explored with, for example, the
 Integrative Genomics Viewer.
@@ -114,4 +114,4 @@ application of eSNP-Karyotyping.
 
 ## Last compiled
 
-This document was knitted on 04 June 2020.
+This document was knitted on 08 June 2020.
