@@ -14,8 +14,8 @@ assessing gene correction in early human embryos report low efficiency
 of mutation repair, high rates of mosaicism and the possibility of
 unintended editing outcomes that may have pathologic consequences. We
 developed computational pipelines to assess single cell genomics and
-transcriptomics datasets from OCT4 (*POU5F1*) CRISPR-Cas9-targeted and
-Cas9-only control human preimplantation embryos. This allowed us to
+transcriptomics datasets from OCT4 (*POU5F1*) CRISPR-Cas9-targeted, Cas9
+and uninjected control human preimplantation embryos. This allowed us to
 evaluate on-target mutations that would be missed by more conventional
 genotyping techniques. This GitHub repository contains the scripts that
 we implemented to carry out these analyses.
@@ -24,11 +24,11 @@ we implemented to carry out these analyses.
 
 The following figure shows the different datasets that we analysed and
 the outputs that were produced with the pipelines listed below. Briefly,
-low-pass whole genome sequencing (WGS) data from OCT4-targeted and Cas9
-control single cells or trophectoderm (TE) biopsies from human embryo
-samples were used to generate copy-number profiles. The genomic DNA
-(gDNA) isolated from single cells or TE biopsies subjected to the
-G\&T-seq protocol (short for single cell genome and transcriptome
+low-pass whole genome sequencing (WGS) data from OCT4-targeted, Cas9 and
+uninjected control single cells or trophectoderm (TE) biopsies from
+human embryo samples were used to generate copy-number profiles. The
+genomic DNA (gDNA) isolated from single cells or TE biopsies subjected
+to the G\&T-seq protocol (short for single cell genome and transcriptome
 sequencing) or to whole genome amplification (WGA) was used for targeted
 deep sequencing of 15 PCR amplicons across the *POU5F1* locus. We took
 advantage of the high coverage obtained at each of the sequenced
@@ -39,14 +39,10 @@ karyotypes.
 
 ![Datasets](figs/datasets.png)
 
-It is important to note that all the gDNA and data were generated in a
-previous study \[Fogarty *et al.* (2017) Nature 550:67-73\] and we did
-not use any additional human embryo samples for our reanalyses.
-
 ## Pipelines
 
 The scripts associated with each pipeline have been organised in
-different folders. Each script contain example execution guidelines.
+different folders. Each script contains example execution guidelines.
 
 ### Copy-number profiles from low-pass WGS data
 
@@ -73,7 +69,13 @@ mate fixing) using Samtools version 1.3.1. SNP calling was performed
 with BCFtools version 1.8 using the `mpileup` (`--max-depth 2000 -a
 'AD,DP,ADF,ADR' -Ou`) and `call` (`-mv -V 'indels' -Ov`) algorithms in
 multi-threaded mode. SNPs supported by less than 10 reads and with
-mapping quality below 50 were filtered out.
+mapping quality below 50 were filtered out. To control for allele
+overamplification, we revisited the homozygous SNP calls in search for
+reads supporting the reference allele at those positions. We changed
+these homozygous SNPs to heterozygous if the fraction of reads
+supporting the reference allele was at least 6% of the total. This
+threshold corresponds to the median of the distribution of the fraction
+of reads supporting the reference allele across samples.
 
 The corresponding scripts are inside the `ampliconSeq` folder and must
 be executed in the following order to generate a VCF file per sample
@@ -83,6 +85,7 @@ containing its SNP profile:
   - trim\_and\_filter.R
   - correct\_fastq.sh
   - call\_snps.sh
+  - correct\_amp\_bias.R
 
 The resulting VCF files can be explored with, for example, the
 Integrative Genomics Viewer.
@@ -114,4 +117,4 @@ application of eSNP-Karyotyping.
 
 ## Last compiled
 
-This document was knitted on 08 June 2020.
+This document was knitted on 22 September 2020.
